@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="pick_part_from_bin">
+
+	<executable package_path="unit_1_flexbe_behaviors.pick_part_from_bin_sm" class="pick_part_from_binSM" />
+	<tagstring></tagstring>
+	<author>docent</author>
+	<date>Sun Apr 25 2021</date>
+	<description>
+		pick's a specific part form a it's bin
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>

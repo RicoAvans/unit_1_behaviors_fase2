@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="pick_part_from_bin_test">
+
+	<executable package_path="unit_1_flexbe_behaviors.pick_part_from_bin_test_sm" class="pick_part_from_bin_testSM" />
+	<tagstring></tagstring>
+	<author>docent</author>
+	<date>Sun Apr 25 2021</date>
+	<description>
+		testbench to test the pick_part_from_bin behavior
+	</description>
+
+
+	<!-- Contained Behaviors -->
+	<contains name="pick_part_from_bin" />
+
+	<!-- Available Parameters -->
+
+</behavior>
