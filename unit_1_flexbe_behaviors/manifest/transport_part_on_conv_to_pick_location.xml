@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="transport_part_on_conv_to_pick_location">
+
+	<executable package_path="unit_1_flexbe_behaviors.transport_part_on_conv_to_pick_location_sm" class="transport_part_on_conv_to_pick_locationSM" />
+	<tagstring></tagstring>
+	<author>Ricardo Kronenburg</author>
+	<date>Mon Jun 07 2021</date>
+	<description>
+		Transports a part on the conveyor to the pick location.
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>

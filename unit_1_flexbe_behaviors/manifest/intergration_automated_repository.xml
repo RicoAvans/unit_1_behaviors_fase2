@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Intergration automated repository">
+
+	<executable package_path="unit_1_flexbe_behaviors.intergration_automated_repository_sm" class="IntergrationautomatedrepositorySM" />
+	<tagstring></tagstring>
+	<author>Ricardo Kronenburg en Koen Manschot</author>
+	<date>Mon Jun 07 2021</date>
+	<description>
+		Picks part from conveyor and puts it on the designated bin, and places orders on the AGV and sends the AGV away when done.
+	</description>
+
+
+	<!-- Contained Behaviors -->
+	<contains name="Transport_part_converyor_to_pick_location" />
+	<contains name="transport_part_form_bin_to_agv" />
+
+	<!-- Available Parameters -->
+
+</behavior>

@@ -8,11 +8,9 @@
 ###########################################################
 
 from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyContainer, PriorityContainer, Logger
-from ariac_flexbe_states.end_assignment_state import EndAssignment
 from ariac_flexbe_states.get_agv_status_state import GetAgvStatusState
 from ariac_flexbe_states.lookup_from_table import LookupFromTableState
 from ariac_flexbe_states.notify_shipment_ready_state import NotifyShipmentReadyState
-from ariac_flexbe_states.start_assignment_state import StartAssignment
 from ariac_logistics_flexbe_states.get_material_locations import GetMaterialLocationsState
 from ariac_logistics_flexbe_states.get_order_state import GetOrderState
 from ariac_logistics_flexbe_states.get_part_from_products_state import GetPartFromProductsState
@@ -59,8 +57,8 @@ class transport_part_form_bin_to_agvSM(Behavior):
 
 
 	def create(self):
-		# x:1733 y:870, x:733 y:440
-		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
+		# x:1733 y:870, x:733 y:440, x:1440 y:836
+		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed', 'no_agv_present'])
 		_state_machine.userdata.action_topic_namespace = ''
 		_state_machine.userdata.part = ''
 		_state_machine.userdata.agv_id = ''
@@ -78,18 +76,12 @@ class transport_part_form_bin_to_agvSM(Behavior):
 
 
 		with _state_machine:
-			# x:43 y:74
-			OperatableStateMachine.add('Start',
-										StartAssignment(),
-										transitions={'continue': 'GetOrderState'},
-										autonomy={'continue': Autonomy.Off})
-
-			# x:1322 y:74
-			OperatableStateMachine.add('GetActionTopicNamespace',
-										LookupFromTableState(parameter_name='/ariac_tables_unit1', table_name='pose_config', index_title='robot', column_title='action_topic_namespace'),
-										transitions={'found': 'GetWichRobot', 'not_found': 'failed'},
-										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
-										remapping={'index_value': 'agv_id', 'column_value': 'action_topic_namespace'})
+			# x:73 y:74
+			OperatableStateMachine.add('GetOrderState',
+										GetOrderState(),
+										transitions={'continue': 'GetProductsFromShipment'},
+										autonomy={'continue': Autonomy.Off},
+										remapping={'order_id': 'order_id', 'shipments': 'shipments', 'number_of_shipments': 'number_of_shipments'})
 
 			# x:293 y:74
 			OperatableStateMachine.add('GetAgvStatus',
@@ -105,13 +97,6 @@ class transport_part_form_bin_to_agvSM(Behavior):
 										autonomy={'done': Autonomy.Off, 'invalid_index': Autonomy.Off},
 										remapping={'list': 'locations', 'index': 'index_zero', 'item': 'bin'})
 
-			# x:31 y:189
-			OperatableStateMachine.add('GetOrderState',
-										GetOrderState(),
-										transitions={'continue': 'GetProductsFromShipment'},
-										autonomy={'continue': Autonomy.Off},
-										remapping={'order_id': 'order_id', 'shipments': 'shipments', 'number_of_shipments': 'number_of_shipments'})
-
 			# x:722 y:74
 			OperatableStateMachine.add('GetPartFromProductsState',
 										GetPartFromProductsState(),
@@ -126,7 +111,7 @@ class transport_part_form_bin_to_agvSM(Behavior):
 										autonomy={'continue': Autonomy.Off},
 										remapping={'part': 'part', 'material_locations': 'locations'})
 
-			# x:266 y:189
+			# x:214 y:174
 			OperatableStateMachine.add('GetProductsFromShipment',
 										GetProductsFromShipmentState(),
 										transitions={'continue': 'GetAgvStatus', 'invalid_index': 'failed'},
@@ -143,7 +128,7 @@ class transport_part_form_bin_to_agvSM(Behavior):
 			# x:524 y:74
 			OperatableStateMachine.add('IsAgvReady',
 										EqualState(),
-										transitions={'true': 'GetPartFromProductsState', 'false': 'finished'},
+										transitions={'true': 'GetPartFromProductsState', 'false': 'no_agv_present'},
 										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
 										remapping={'value_a': 'agv_state', 'value_b': 'agv_ready'})
 
@@ -157,7 +142,7 @@ class transport_part_form_bin_to_agvSM(Behavior):
 			# x:1526 y:667
 			OperatableStateMachine.add('NotifyShipmentReady',
 										NotifyShipmentReadyState(),
-										transitions={'continue': 'End', 'fail': 'failed'},
+										transitions={'continue': 'finished', 'fail': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'fail': Autonomy.Off},
 										remapping={'agv_id': 'agv_id', 'shipment_type': 'shipment_type', 'success': 'success', 'message': 'message'})
 
@@ -189,11 +174,12 @@ class transport_part_form_bin_to_agvSM(Behavior):
 										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit},
 										remapping={'action_topic_namespace': 'action_topic_namespace', 'agv_id': 'agv_id', 'pose_order': 'pose_order', 'gripper_service': 'gripper_service', 'part': 'part'})
 
-			# x:1543 y:774
-			OperatableStateMachine.add('End',
-										EndAssignment(),
-										transitions={'continue': 'finished'},
-										autonomy={'continue': Autonomy.Off})
+			# x:1322 y:74
+			OperatableStateMachine.add('GetActionTopicNamespace',
+										LookupFromTableState(parameter_name='/ariac_tables_unit1', table_name='pose_config', index_title='robot', column_title='action_topic_namespace'),
+										transitions={'found': 'GetWichRobot', 'not_found': 'failed'},
+										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
+										remapping={'index_value': 'agv_id', 'column_value': 'action_topic_namespace'})
 
 
 		return _state_machine
