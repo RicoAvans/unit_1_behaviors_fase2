@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="place_part_on_agv">
+
+	<executable package_path="unit_1_flexbe_behaviors.place_part_on_agv_sm" class="place_part_on_agvSM" />
+	<tagstring></tagstring>
+	<author>Ricardo_Kronenburg</author>
+	<date>Wed Jun 02 2021</date>
+	<description>
+		Behavior to place part on agv
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>

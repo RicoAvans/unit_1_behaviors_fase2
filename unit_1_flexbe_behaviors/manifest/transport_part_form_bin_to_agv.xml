@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="transport_part_form_bin_to_agv">
+
+	<executable package_path="unit_1_flexbe_behaviors.transport_part_form_bin_to_agv_sm" class="transport_part_form_bin_to_agvSM" />
+	<tagstring></tagstring>
+	<author>Ricardo Kronenburg</author>
+	<date>Wed Jun 02 2021</date>
+	<description>
+		transports a part from a bin to an agv, given an order-id
+	</description>
+
+
+	<!-- Contained Behaviors -->
+	<contains name="pick_part_from_bin" />
+	<contains name="place_part_on_agv" />
+
+	<!-- Available Parameters -->
+
+</behavior>
